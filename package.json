@@ -11,6 +11,7 @@
     "gpsoauthnode": "^0.0.5",
     "istanbul": "^0.4.4",
     "long": "^3.2.0",
+    "mongodb": "^2.2.5",
     "node-pogo-signature": "^2.0.0",
     "protobufjs": "^5.0.1",
     "request": "^2.73.0",
