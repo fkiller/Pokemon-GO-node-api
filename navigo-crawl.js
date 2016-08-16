@@ -9,8 +9,8 @@ var fs = require('fs');
 var a = new PokemonGO.Pokeio();
 
 // Connection URL
-//var url = "mongodb://40.76.17.221:27017/navigo";
-var url = "mongodb://localhost:27017/navigo";
+var url = "mongodb://40.76.17.221:27017/navigo";
+//var url = "mongodb://localhost:27017/navigo";
 
 MongoClient.connect(url, function (err, db) {
     assert.equal(null, err);

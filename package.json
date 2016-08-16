@@ -16,10 +16,12 @@
     "protobufjs": "^5.0.1",
     "request": "^2.73.0",
     "s2-geometry": "^1.2.7",
-    "tape": "^4.6.0"
+    "tape": "^4.6.0",
+    "forever": "latest"
   },
   "scripts": {
-    "test": "istanbul cover node_modules/tape/bin/tape tests/**/*.js"
+    "test": "istanbul cover node_modules/tape/bin/tape tests/**/*.js",
+    "start": "./node_modules/forever/bin/forever start navigo-crawl.js"
   },
   "repository": {
     "type": "git",
