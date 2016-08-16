@@ -14,12 +14,6 @@ var url = "mongodb://40.76.17.221:27017/navigo";
 
 MongoClient.connect(url, function (err, db) {
     assert.equal(null, err);
-    db.on('close', function () {
-        console.log('DB connection closed');
-    });
-    db.on('reconnect', function () {
-        console.log('DB reconnected');
-    });
     console.log("Connected correctly to server");
     init(db);
 });
@@ -62,6 +56,12 @@ if (fs.existsSync('./config.json')) {
 }
 
 function init(db) {
+    db.on('close', function () {
+        console.log('DB connection closed');
+    });
+    db.on('reconnect', function () {
+        console.log('DB reconnected');
+    });
     a.init(config.username, config.password, config.location, config.provider, function (err) {
         if (err) throw err;
 
@@ -98,6 +98,7 @@ function init(db) {
                                 for (var j = hb.cells[i].Fort.length - 1; j >= 0; j--) {   // You should check if it is near enough to use!!
                                     var fort = hb.cells[i].Fort[j];
                                     if (fort.FortId) {
+                                        console.log('Upserting... '+fort.FortId);
                                         db.collection('forts').update({ FortId: fort.FortId }, fort, { upsert: true });
                                     }
                                 }
