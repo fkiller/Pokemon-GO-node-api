@@ -14,6 +14,12 @@ var url = "mongodb://40.76.17.221:27017/navigo";
 
 MongoClient.connect(url, function (err, db) {
     assert.equal(null, err);
+    db.on('close', function () {
+        console.log('DB connection closed');
+    });
+    db.on('reconnect', function () {
+        console.log('DB reconnected');
+    });
     console.log("Connected correctly to server");
     init(db);
 });
@@ -92,9 +98,16 @@ function init(db) {
                                 for (var j = hb.cells[i].Fort.length - 1; j >= 0; j--) {   // You should check if it is near enough to use!!
                                     var fort = hb.cells[i].Fort[j];
                                     if (fort.FortId) {
-                                        db.collection('forts').update({FortId:fort.FortId}, fort, {upsert: true});
+                                        db.collection('forts').update({ FortId: fort.FortId }, fort, { upsert: true });
                                     }
                                 }
+                            }
+
+                            if (config.location.coords.latitude > config.location1.coords.latitude || config.location.coords.latitude < config.location0.coords.latitude) {
+                                config.deltalat = -1 * config.deltalat;
+                                config.location.coords.longitude += config.deltalong;
+                            } else {
+                                config.location.coords.latitude += config.deltalat;
                             }
 
                             fs.writeFile('./config.json', JSON.stringify(config), function (err) {
@@ -106,24 +119,9 @@ function init(db) {
                                 console.log('Configuration saved successfully.')
                             });
 
-                            if (config.location.coords.latitude > config.location1.coords.latitude || config.location.coords.latitude < config.location0.coords.latitude) {
-                                config.deltalat = -1 * config.deltalat;
-                                fs.writeFile('./config.json', JSON.stringify(config), function (err) {
-                                    if (err) {
-                                        console.log('There has been an error saving your configuration data.');
-                                        console.log(err.message);
-                                        return;
-                                    }
-                                    console.log('Configuration saved successfully.')
-                                });
-                                config.location.coords.longitude += config.deltalong;
-                            } else {
-                                config.location.coords.latitude += config.deltalat;
-                            }
-                            
                             if (config.location.coords.longitude > config.location1.coords.longitude) {
                                 console.log('------------------end of work-------------------');
-                                console.log(JSON.stringify(pokestops));
+                                //console.log(JSON.stringify(pokestops));
                                 process.exit();
                             }
 

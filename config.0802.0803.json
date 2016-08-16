@@ -1,0 +1,31 @@
+{
+    "location0": {
+        "type": "coords",
+        "coords": {
+            "latitude": 38.02366156,
+            "longitude": -78.65867456,
+            "altitude": 0
+        }
+    },
+    "location": {
+        "type": "coords",
+        "coords": {
+            "latitude": 42.58866100000092,
+            "longitude": -78.41367456,
+            "altitude": 0
+        }
+    },
+    "location1": {
+        "type": "coords",
+        "coords": {
+            "latitude": 43.45304178,
+            "longitude": -71.76422378,
+            "altitude": 0
+        }
+    },
+    "deltalat": 0.010,
+    "deltalong": 0.010,
+    "username": "mappull001",
+    "password": "123412",
+    "provider": "ptc"
+}
