@@ -106,6 +106,7 @@ function init(db) {
                             config.location.coords.latitude += config.deltalat;
                             if (config.location.coords.latitude > config.location1.coords.latitude || config.location.coords.latitude < config.location0.coords.latitude) {
                                 config.deltalat = -1 * config.deltalat;
+                                config.location.coords.latitude += config.deltalat;
                                 config.location.coords.longitude += config.deltalong;
                             }
 
