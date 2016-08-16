@@ -106,8 +106,6 @@ function init(db) {
                                 console.log('Configuration saved successfully.')
                             });
 
-                            config.location.coords.latitude += config.deltalat;
-
                             if (config.location.coords.latitude > config.location1.coords.latitude || config.location.coords.latitude < config.location0.coords.latitude) {
                                 config.deltalat = -1 * config.deltalat;
                                 fs.writeFile('./config.json', JSON.stringify(config), function (err) {
@@ -119,7 +117,10 @@ function init(db) {
                                     console.log('Configuration saved successfully.')
                                 });
                                 config.location.coords.longitude += config.deltalong;
+                            } else {
+                                config.location.coords.latitude += config.deltalat;
                             }
+                            
                             if (config.location.coords.longitude > config.location1.coords.longitude) {
                                 console.log('------------------end of work-------------------');
                                 console.log(JSON.stringify(pokestops));
