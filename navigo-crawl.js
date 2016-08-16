@@ -110,14 +110,15 @@ function init(db) {
                                 config.location.coords.longitude += config.deltalong;
                             }
 
-                            fs.writeFile('./config.json', JSON.stringify(config), function (err) {
+                            fs.writeFileSync('./config.json', JSON.stringify(config));
+                            /*, function (err) {
                                 if (err) {
                                     console.log('There has been an error saving your configuration data.');
                                     console.log(err.message);
                                     return;
                                 }
                                 console.log('Configuration saved successfully.')
-                            });
+                            });*/
 
                             if (config.location.coords.longitude > config.location1.coords.longitude) {
                                 console.log('------------------end of work-------------------');
