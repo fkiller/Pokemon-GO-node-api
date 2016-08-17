@@ -1,1 +1,31 @@
-{"location0":{"type":"coords","coords":{"latitude":38.02366156,"longitude":-78.65867456,"altitude":0}},"location":{"type":"coords","coords":{"latitude":38.40366099999878,"longitude":-77.91367456000002,"altitude":0}},"location1":{"type":"coords","coords":{"latitude":43.45304178,"longitude":-71.76422378,"altitude":0}},"deltalat":-0.005,"deltalong":0.02,"username":"mappull001","password":"123412","provider":"ptc"}
+{
+    "location0": {
+        "type": "coords",
+        "coords": {
+            "latitude": 38.023661,
+            "longitude": -78.658674,
+            "altitude": 0
+        }
+    },
+    "location": {
+        "type": "coords",
+        "coords": {
+            "latitude": 38.253660,
+            "longitude": -77.913674,
+            "altitude": 0
+        }
+    },
+    "location1": {
+        "type": "coords",
+        "coords": {
+            "latitude": 43.453041,
+            "longitude": -71.764223,
+            "altitude": 0
+        }
+    },
+    "deltalat": -0.005,
+    "deltalong": 0.02,
+    "username": "mappull001",
+    "password": "123412",
+    "provider": "ptc"
+}

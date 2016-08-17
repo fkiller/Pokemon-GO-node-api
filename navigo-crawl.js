@@ -35,8 +35,8 @@ if (fs.existsSync('./config.json')) {
     config.location = {
         type: 'coords',
         coords: {
-            latitude: 43.21366156,
-            longitude: -78.65867456,
+            latitude: 40.785250,
+            longitude: -73.98867456,
             altitude: 0
         }
     };
@@ -93,8 +93,10 @@ function init(db) {
                             return;
                         }
                     } else {
+                        //console.log(hb);
                         if (hb.cells) {
                             for (var i = hb.cells.length - 1; i >= 0; i--) {
+                                //console.log(hb.cells[i]);
                                 for (var j = hb.cells[i].Fort.length - 1; j >= 0; j--) {   // You should check if it is near enough to use!!
                                     var fort = hb.cells[i].Fort[j];
                                     if (fort.FortId) {
@@ -104,11 +106,11 @@ function init(db) {
                                 }
                             }
 
-                            config.location.coords.latitude += config.deltalat;
+                            config.location.coords.latitude = parseFloat((config.location.coords.latitude + config.deltalat).toFixed(6));
                             if (config.location.coords.latitude > config.location1.coords.latitude || config.location.coords.latitude < config.location0.coords.latitude) {
                                 config.deltalat = -1 * config.deltalat;
-                                config.location.coords.latitude += config.deltalat;
-                                config.location.coords.longitude += config.deltalong;
+                                config.location.coords.latitude = parseFloat((config.location.coords.latitude + config.deltalat).toFixed(6));
+                                config.location.coords.longitude = parseFloat((config.location.coords.longitude + config.deltalong).toFixed(6));
                             }
 
                             fs.writeFileSync('./config.json', JSON.stringify(config));
@@ -128,9 +130,10 @@ function init(db) {
                             }
 
                             a.SetLocation(config.location, function (err, data) {
-                                if (err) console.log(err); else {
+                                if (err) { console.log(err); } else {
                                     console.log('moved');
                                     console.log(config.location);
+                                    console.log(data);
                                 }
 
                             });
