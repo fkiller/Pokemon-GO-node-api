@@ -71,7 +71,7 @@ console.log('3');
                 args: ['--latitude ' + config.location.coords.latitude, '--longitude ' + config.location.coords.longitude, '--SACSID ~AJKiYcFmiHahKsmz3v7E-9H5YXdZDGuau94CzvgQPqsf-ICaETpMcrWhDn0Y8gdYKa7nUM2-hqYX-7AZXtAbi31hAc1nriEX9-UjBfrHqqE3XYBN5iwDzBxthy-ECEwrCPBu40urwQoiG2aS8PvF_r8xGaAGECHEpPv2t7vjDOBhmR02zBGcspjI_MsP461h1h48sJpotN7uPk2jxBvf4yPj6qU3V6pK4AnKstTdWs-LaYe4pYyMX_Nl_RuyGC4mYcmDACjL_qSzzCj_OkuSxpkIwT-4Idqg2eUZsLyQZkAHTrbAvCr0BTZGaPQvOOqkxb-HxiB7uaCU', '--csrftoken zMfZsDlGf3Ijhj5CHrMPBTau33jh2hFm']
             };
 
-            PythonShell('../pokestop/pokestop.py', options, function (err, results) {
+            PythonShell('pokestop.py', options, function (err, results) {
 console.log('4');
                 if (err) throw err;
                 console.log(results);
@@ -82,6 +82,8 @@ console.log('4');
                     }
                 });
             });
+            //console.log(pyshell);
+            while(!PythonShell.terminated);
             fs.writeFileSync('./config.json', JSON.stringify(config));
         }
         config.deltalat = -1 * config.deltalat;
