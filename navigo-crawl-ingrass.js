@@ -3,7 +3,7 @@
 var MongoClient = require('mongodb').MongoClient
     , assert = require('assert');
 var fs = require('fs');
-var PythonShell = require('python-shell');
+var execSync = require('exec-sync');
 
 // Connection URL
 var url = "mongodb://bigdad.eastus.cloudapp.azure.com/navigo";
@@ -56,34 +56,45 @@ function init(db) {
     db.on('reconnect', function () {
         console.log('DB reconnected');
     });
-console.log('1');
-    for (; config.location.coords.latitude < config.location1.coords.latitude; config.location.coords.latitude = parseFloat((config.location.coords.latitude + config.deltalat).toFixed(6))) 
-    {
-console.log('2');
-        config.deltalong = (config.deltalat * 360)/(Math.cos(config.location.coords.latitude * (180 / Math.PI)) *40075);
-        console.log('config.deltalong:'+config.deltalong);
-        for (; config.location.coords.longitude < config.location1.coords.longitude && config.location.coords.longitude > config.location0.coords.longitude; config.location.coords.longitude = parseFloat(config.location.coords.longitude + config.deltalong).toFixed(6)) 
-        {
-console.log('3');
+    console.log('1');
+    for (; config.location.coords.latitude < config.location1.coords.latitude; config.location.coords.latitude = parseFloat((config.location.coords.latitude + config.deltalat).toFixed(6))) {
+        console.log('2');
+        config.deltalong = (config.deltalat * 360) / (Math.cos(config.location.coords.latitude * (180 / Math.PI)) * 40075);
+        console.log('config.deltalong:' + config.deltalong);
+        for (; config.location.coords.longitude < config.location1.coords.longitude && config.location.coords.longitude > config.location0.coords.longitude; config.location.coords.longitude = parseFloat(config.location.coords.longitude + config.deltalong).toFixed(6)) {
+            console.log('3');
 
             var options = {
                 mode: 'json',
-                args: ['--latitude ' + config.location.coords.latitude, '--longitude ' + config.location.coords.longitude, '--SACSID ~AJKiYcFmiHahKsmz3v7E-9H5YXdZDGuau94CzvgQPqsf-ICaETpMcrWhDn0Y8gdYKa7nUM2-hqYX-7AZXtAbi31hAc1nriEX9-UjBfrHqqE3XYBN5iwDzBxthy-ECEwrCPBu40urwQoiG2aS8PvF_r8xGaAGECHEpPv2t7vjDOBhmR02zBGcspjI_MsP461h1h48sJpotN7uPk2jxBvf4yPj6qU3V6pK4AnKstTdWs-LaYe4pYyMX_Nl_RuyGC4mYcmDACjL_qSzzCj_OkuSxpkIwT-4Idqg2eUZsLyQZkAHTrbAvCr0BTZGaPQvOOqkxb-HxiB7uaCU', '--csrftoken zMfZsDlGf3Ijhj5CHrMPBTau33jh2hFm']
+                args: ['--latitude ' + config.location.coords.latitude, '--longitude ' + config.location.coords.longitude, '--SACSID '  + config.SACSID, '--csrftoken ' + config.csrftoken]
             };
 
-            PythonShell('pokestop.py', options, function (err, results) {
-console.log('4');
-                if (err) throw err;
-                console.log(results);
-                results.forEach(function (pokestop) {
-                    if (pokestop.guid) {
-                        console.log('Upserting... ' + pokestop.guid);
-                        db.collection('pokestop').update({ guid: pokestop.guid }, pokestop, { upsert: true });
-                    }
-                });
+            var cmd = 'python ../pokestop/pokestop.py ' + options.args.join(' ')
+            console.log(cmd);
+            var output = execSync(cmd);
+            console.log(output);
+            var results = JSON.parse(output);
+
+            results.forEach(function (pokestop) {
+                if (pokestop.guid) {
+                    console.log('Upserting... ' + pokestop.guid);
+                    db.collection('pokestop').update({ guid: pokestop.guid }, pokestop, { upsert: true });
+                }
             });
+
+            //             PythonShell('pokestop.py', options, function (err, results) {
+            // console.log('4');
+            //                 if (err) throw err;
+            //                 console.log(results);
+            //                 results.forEach(function (pokestop) {
+            //                     if (pokestop.guid) {
+            //                         console.log('Upserting... ' + pokestop.guid);
+            //                         db.collection('pokestop').update({ guid: pokestop.guid }, pokestop, { upsert: true });
+            //                     }
+            //                 });
+            //             });
             //console.log(pyshell);
-            while(!PythonShell.terminated);
+            // while(!PythonShell.terminated);
             fs.writeFileSync('./config.json', JSON.stringify(config));
         }
         config.deltalat = -1 * config.deltalat;
