@@ -41,6 +41,7 @@ if (fs.existsSync('./config.json')) {
         }
     };
     config.deltalat = 0.0125764192139738;
+    config.progress = 0;
     //config.deltalong = 0.00500;
 }
 
@@ -69,8 +70,10 @@ function init() {
         var url = "mongodb://localhost/navigo";
         var server = new Server('bigdad.eastus.cloudapp.azure.com');
         var dbpokestop = server.db('navigo').getCollection('pokestop');
-        console.log('1');
-        cities.forEach(function (city) {
+        console.log('Starting from...' + config.progress + '/' + cities.length);
+        for(var i = config.progress;i<cities.length;i++) {
+            var city = cities[i];
+//        cities.forEach(function (city) {
             var options = {
                 mode: 'json',
                 args: ['--latitude ' + city.lat, '--longitude ' + city.lng, '--SACSID ' + config.SACSID, '--csrftoken ' + config.csrftoken]
@@ -84,7 +87,9 @@ function init() {
             results.forEach(function (pokestop) {
                 if (pokestop.guid) dbpokestop.update({ guid: pokestop.guid }, pokestop, { upsert: true });
             });
-        });
+            fs.writeFileSync('./config.json', JSON.stringify(config));
+        }
+//        });
     }).run();
 }
 
