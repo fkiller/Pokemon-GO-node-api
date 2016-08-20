@@ -71,8 +71,8 @@ function init() {
         var server = new Server('bigdad.eastus.cloudapp.azure.com');
         var dbpokestop = server.db('navigo').getCollection('pokestop');
         console.log('Starting from...' + config.progress + '/' + cities.length);
-        for(var i = config.progress;i<cities.length;i++) {
-            var city = cities[i];
+        for(;config.progress<cities.length;config.progress++) {
+            var city = cities[config.progress];
 //        cities.forEach(function (city) {
             var options = {
                 mode: 'json',
