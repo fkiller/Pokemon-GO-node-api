@@ -2,8 +2,8 @@
     "location0": {
         "type": "coords",
         "coords": {
-            "latitude": 38.023661,
-            "longitude": -78.658674,
+            "latitude": 38.25366,
+            "longitude": -77.913766,
             "altitude": 0
         }
     },
@@ -11,19 +11,19 @@
         "type": "coords",
         "coords": {
             "latitude": 38.25366,
-            "longitude": "-77.913766",
+            "longitude": -77.913766,
             "altitude": 0
         }
     },
     "location1": {
         "type": "coords",
         "coords": {
-            "latitude": 43.453041,
+            "latitude": 43.45304178,
             "longitude": -71.764223,
             "altitude": 0
         }
     },
-    "deltalat": -0.005,
+    "deltalat": 0.012704102,
     "deltalong": -0.00009161543413499255,
     "SACSID": "~AJKiYcHMxLy4gd9Aeqz5Gypj4NmkNgUfTgdUR3LRFvhABJ7zfdDMsV2aM85CFNkPc_VC9E_550pmiIs_TUIkFGghokAoC9xSDVE4DgyxEPKcxoShgedm7dzf3WJogb13yt39V4EY3aJmAPpssOUap_kuwDTpsDUTDOi0-MeQ47Abo3Gz184PwaUa-mPUcW_F_yyHfZulNL01bo36lpf9g32wipJMTSvO2ttCQtSK7dzCNljFG705nja8DLUI_faXcrA5OT2WXM9DNmp7-mwjirf9JLiLXkDiAIjLjp1sJoNY73K3AN8MwC4dTHr236cnMlyrAGt9SWeh",
     "csrftoken": "zMfZsDlGf3Ijhj5CHrMPBTau33jh2hFm",
