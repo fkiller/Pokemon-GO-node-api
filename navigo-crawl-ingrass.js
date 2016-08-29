@@ -1,19 +1,20 @@
 'use strict';
 
-var MongoClient = require('mongodb').MongoClient
-    , assert = require('assert');
+var Server = require("mongo-sync").Server;
+// var MongoClient = require('mongodb').MongoClient
+//     , assert = require('assert');
 var fs = require('fs');
 var execSync = require('exec-sync');
 
 // Connection URL
-var url = "mongodb://bigdad.eastus.cloudapp.azure.com/navigo";
+//var url = "mongodb://bigdad.eastus.cloudapp.azure.com/navigo";
 //var url = "mongodb://localhost:27017/navigo";
 
-MongoClient.connect(url, function (err, db) {
-    assert.equal(null, err);
-    console.log("Connected correctly to server");
-    init(db);
-});
+// MongoClient.connect(url, function (err, db) {
+//     assert.equal(null, err);
+//     console.log("Connected correctly to server");
+//     init(db);
+// });
 
 var config = {};
 
@@ -49,37 +50,34 @@ if (fs.existsSync('./config.json')) {
     //config.deltalong = 0.00500;
 }
 
-function init(db) {
-    db.on('close', function () {
-        console.log('DB connection closed');
-    });
-    db.on('reconnect', function () {
-        console.log('DB reconnected');
-    });
-    for (; config.location.coords.latitude < config.location1.coords.latitude; config.location.coords.latitude = parseFloat((config.location.coords.latitude + config.deltalat).toFixed(6))) {
-        config.deltalong = (config.deltalat * 360) / (Math.cos(config.location.coords.latitude * (Math.PI / 180)) * 40075);
-        console.log('config.deltalong:' + config.deltalong);
-        for (; config.location.coords.longitude < config.location1.coords.longitude && config.location.coords.longitude > config.location0.coords.longitude; config.location.coords.longitude = parseFloat(config.location.coords.longitude + config.deltalong).toFixed(6)) {
-            var options = {
-                mode: 'json',
-                args: ['--latitude ' + config.location.coords.latitude, '--longitude ' + config.location.coords.longitude, '--SACSID '  + config.SACSID, '--csrftoken ' + config.csrftoken]
-            };
+function init() {
+    var Fiber = require('fibers');
+    Fiber(function () {
+        var server = new Server('bigdad.eastus.cloudapp.azure.com');
+        var dbpokestop = server.db('navigo').getCollection('pokestop');
+        for (; config.location.coords.latitude < config.location1.coords.latitude; config.location.coords.latitude = parseFloat((config.location.coords.latitude + config.deltalat).toFixed(6))) {
+            config.deltalong = (config.deltalat * 360) / (Math.cos(config.location.coords.latitude * (Math.PI / 180)) * 40075);
+            console.log('config.deltalong:' + config.deltalong);
+            for (; config.location.coords.longitude < config.location1.coords.longitude && config.location.coords.longitude > config.location0.coords.longitude; config.location.coords.longitude = parseFloat(config.location.coords.longitude + config.deltalong).toFixed(6)) {
+                var options = {
+                    mode: 'json',
+                    args: ['--latitude ' + config.location.coords.latitude, '--longitude ' + config.location.coords.longitude, '--SACSID ' + config.SACSID, '--csrftoken ' + config.csrftoken]
+                };
 
-            var cmd = 'python ../pokestop/pokestop.py ' + options.args.join(' ')
-            console.log(cmd);
-            var output = execSync(cmd);
-            console.log(output);
-            var results = JSON.parse(output);
+                var cmd = 'python ../pokestop/pokestop.py ' + options.args.join(' ')
+                console.log(cmd);
+                var output = execSync(cmd);
+                console.log(output);
+                var results = JSON.parse(output);
+                results.forEach(function (pokestop) {
+                    if (pokestop.guid) dbpokestop.update({ guid: pokestop.guid }, pokestop, { upsert: true });
+                });
 
-            results.forEach(function (pokestop) {
-                if (pokestop.guid) {
-                    console.log('Upserting... ' + pokestop.guid);
-                    db.collection('pokestop').update({ guid: pokestop.guid }, pokestop, { upsert: true });
-                }
-            });
-
-            fs.writeFileSync('./config.json', JSON.stringify(config));
+                fs.writeFileSync('./config.json', JSON.stringify(config));
+            }
+            config.deltalat = -1 * config.deltalat;
         }
-        config.deltalat = -1 * config.deltalat;
-    }
+    }).run();
 }
+
+init();
