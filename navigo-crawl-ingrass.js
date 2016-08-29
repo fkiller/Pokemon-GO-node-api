@@ -58,7 +58,7 @@ function init() {
         for (; config.location.coords.latitude < config.location1.coords.latitude; config.location.coords.latitude = parseFloat((config.location.coords.latitude + config.deltalat).toFixed(6))) {
             config.deltalong = (config.deltalat * 360) / (Math.cos(config.location.coords.latitude * (Math.PI / 180)) * 40075);
             console.log('config.deltalong:' + config.deltalong);
-            for (; config.location.coords.longitude < config.location1.coords.longitude && config.location.coords.longitude > config.location0.coords.longitude; config.location.coords.longitude = parseFloat(config.location.coords.longitude + config.deltalong).toFixed(6)) {
+            for (; config.location.coords.longitude < config.location1.coords.longitude && config.location.coords.longitude >= config.location0.coords.longitude; config.location.coords.longitude = parseFloat(config.location.coords.longitude + config.deltalong).toFixed(6)) {
                 var options = {
                     mode: 'json',
                     args: ['--latitude ' + config.location.coords.latitude, '--longitude ' + config.location.coords.longitude, '--SACSID ' + config.SACSID, '--csrftoken ' + config.csrftoken]
