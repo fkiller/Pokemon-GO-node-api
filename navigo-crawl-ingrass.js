@@ -68,7 +68,13 @@ function init() {
                 console.log(cmd);
                 var output = execSync(cmd);
                 console.log(output);
-                var results = JSON.parse(output);
+                var results;
+                try {
+                    results = JSON.parse(output);
+                }
+                catch (e) {
+                    throw e;
+                }
                 results.forEach(function (pokestop) {
                     if (pokestop.guid) dbpokestop.update({ guid: pokestop.guid }, pokestop, { upsert: true });
                 });
