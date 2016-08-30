@@ -55,13 +55,13 @@ function init() {
     Fiber(function () {
         var server = new Server('bigdad.eastus.cloudapp.azure.com');
         var dbpokestop = server.db('navigo').getCollection('pokestop');
-        for (; config.location.coords.latitude < config.location1.coords.latitude; config.location.coords.latitude = parseFloat(parseFloat(config.location.coords.latitude) + parseFloat(config.deltalat)).toFixed(6)) {
+        for (; config.location.coords.latitude < config.location1.coords.latitude; config.location.coords.latitude = parseFloat(parseFloat(config.location.coords.latitude) + parseFloat(config.deltalat))) {
             config.deltalong = (config.deltalat * 360) / (Math.cos(config.location.coords.latitude * (Math.PI / 180)) * 40075);
             console.log('config.deltalong:' + config.deltalong);
-            for (; config.location.coords.longitude < config.location1.coords.longitude && config.location.coords.longitude >= config.location0.coords.longitude; config.location.coords.longitude = parseFloat(parseFloat(config.location.coords.longitude) + parseFloat(config.deltalong)).toFixed(6)) {
+            for (; config.location.coords.longitude < config.location1.coords.longitude && config.location.coords.longitude >= config.location0.coords.longitude; config.location.coords.longitude = parseFloat(parseFloat(config.location.coords.longitude) + parseFloat(config.deltalong))) {
                 var options = {
                     mode: 'json',
-                    args: ['--latitude ' + config.location.coords.latitude, '--longitude ' + config.location.coords.longitude, '--SACSID ' + config.SACSID, '--csrftoken ' + config.csrftoken]
+                    args: ['--latitude ' + config.location.coords.latitude.toFixed(6), '--longitude ' + config.location.coords.longitude.toFixed(6), '--SACSID ' + config.SACSID, '--csrftoken ' + config.csrftoken]
                 };
 
                 var cmd = 'python ../pokestop/pokestop.py ' + options.args.join(' ')
@@ -82,7 +82,7 @@ function init() {
                 fs.writeFileSync('./config.json', JSON.stringify(config));
             }
             config.deltalat = -1 * config.deltalat;
-            config.location.coords.longitude = parseFloat(parseFloat(config.location.coords.longitude) + parseFloat(config.deltalong)).toFixed(6);
+            config.location.coords.longitude = parseFloat(parseFloat(config.location.coords.longitude) + parseFloat(config.deltalong));
         }
     }).run();
 }
