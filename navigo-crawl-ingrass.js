@@ -56,7 +56,7 @@ function init() {
         var server = new Server('bigdad.eastus.cloudapp.azure.com');
         var dbpokestop = server.db('navigo').getCollection('pokestop');
         for (; config.location.coords.latitude < config.location1.coords.latitude; config.location.coords.latitude = parseFloat(parseFloat(config.location.coords.latitude) + parseFloat(config.deltalat))) {
-            config.deltalong = (config.deltalat * 360) / (Math.cos(config.location.coords.latitude * (Math.PI / 180)) * 40075);
+            config.deltalong = (Math.abs(config.deltalat) * 360) / (Math.cos(config.location.coords.latitude * (Math.PI / 180)) * 40075);
             console.log('config.deltalong:' + config.deltalong);
             for (; config.location.coords.longitude < config.location1.coords.longitude && config.location.coords.longitude >= config.location0.coords.longitude; config.location.coords.longitude = parseFloat(parseFloat(config.location.coords.longitude) + parseFloat(config.deltalong))) {
                 var options = {
