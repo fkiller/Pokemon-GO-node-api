@@ -82,6 +82,7 @@ function init() {
                 fs.writeFileSync('./config.json', JSON.stringify(config));
             }
             config.deltalat = -1 * config.deltalat;
+            config.location.coords.longitude = parseFloat(parseFloat(config.location.coords.longitude) + parseFloat(config.deltalong)).toFixed(6);
         }
     }).run();
 }
